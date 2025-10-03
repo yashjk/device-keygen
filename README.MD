@@ -21,7 +21,6 @@ Broprint.js generates a deterministic string per browser by combining <b>Audio</
 
 > ⚠ For educational and demonstration purposes only.
 
-
 ## ✨ Features
 
 - Minimal bundle size, zero runtime deps
@@ -29,98 +28,110 @@ Broprint.js generates a deterministic string per browser by combining <b>Audio</
 - Works in modern browsers; graceful fallbacks when signals are blocked
 - Includes TypeScript types
 
-
 ## 📦 Installation
 
 ### npm
+
 ```sh
-npm i @rajesh896/broprint.js
+npm i device-unique-keygen
 ```
 
 ### Yarn
+
 ```sh
-yarn add @rajesh896/broprint.js
+yarn add device-unique-keygen
 ```
 
 ### CDN (v2.2.0+)
+
 ESM (modern browsers):
+
 ```html
 <script type="module">
-  import { getCurrentBrowserFingerPrint } from 'https://cdn.jsdelivr.net/npm/@rajesh896/broprint.js@latest/lib/index.mjs';
-  getCurrentBrowserFingerPrint().then(fp => console.log('Fingerprint:', fp));
+	import { getCurrentBrowserFingerPrint } from "https://cdn.jsdelivr.net/npm/@rajesh896/broprint.js@latest/lib/index.mjs";
+	getCurrentBrowserFingerPrint().then((fp) => console.log("Fingerprint:", fp));
 </script>
 ```
 
 Classic global (no module support needed):
+
 ```html
 <script src="https://cdn.jsdelivr.net/npm/@rajesh896/broprint.js@latest/lib/index.global.js"></script>
 <script>
-  getCurrentBrowserFingerPrint().then(fp => console.log('Fingerprint (global):', fp));
+	getCurrentBrowserFingerPrint().then((fp) =>
+		console.log("Fingerprint (global):", fp)
+	);
 </script>
 ```
-
 
 ## 🚀 Quick Start
 
 ### ESM (Vite, Next.js, CRA with modules)
+
 ```js
-import { getCurrentBrowserFingerPrint } from '@rajesh896/broprint.js';
+import { getCurrentBrowserFingerPrint } from "@rajesh896/broprint.js";
 
 const fp = await getCurrentBrowserFingerPrint();
 console.log(fp);
 ```
 
 ### CommonJS (Node-style bundlers)
+
 ```js
-const { getCurrentBrowserFingerPrint } = require('@rajesh896/broprint.js');
+const { getCurrentBrowserFingerPrint } = require("@rajesh896/broprint.js");
 
 getCurrentBrowserFingerPrint().then(console.log);
 ```
 
 ### React example
-```js
-import { useEffect, useState } from 'react';
-import { getCurrentBrowserFingerPrint } from '@rajesh896/broprint.js';
 
-export default function Component(){
-  const [fp, setFp] = useState('');
-  useEffect(() => {
-    getCurrentBrowserFingerPrint()
-      .then(v => setFp(String(v)))
-      .catch(() => setFp('ERROR'));
-  }, []);
-  return <pre>{fp}</pre>;
+```js
+import { useEffect, useState } from "react";
+import { getCurrentBrowserFingerPrint } from "@rajesh896/broprint.js";
+
+export default function Component() {
+	const [fp, setFp] = useState("");
+	useEffect(() => {
+		getCurrentBrowserFingerPrint()
+			.then((v) => setFp(String(v)))
+			.catch(() => setFp("ERROR"));
+	}, []);
+	return <pre>{fp}</pre>;
 }
 ```
 
 ### Plain HTML (local install)
+
 ```html
-<!doctype html>
+<!DOCTYPE html>
 <html>
-  <head><meta charset="utf-8"/><title>Broprint</title></head>
-  <body>
-    <script type="module">
-      import { getCurrentBrowserFingerPrint } from './node_modules/@rajesh896/broprint.js/lib/index.mjs';
-      getCurrentBrowserFingerPrint().then(console.log);
-    </script>
-  </body>
+	<head>
+		<meta charset="utf-8" />
+		<title>Broprint</title>
+	</head>
+	<body>
+		<script type="module">
+			import { getCurrentBrowserFingerPrint } from "./node_modules/@rajesh896/broprint.js/lib/index.mjs";
+			getCurrentBrowserFingerPrint().then(console.log);
+		</script>
+	</body>
 </html>
 ```
-
 
 ## 📚 API
 
 ### `getCurrentBrowserFingerPrint(): Promise<string>`
+
 Returns a deterministic string for the current browser instance.
 
 Under the hood, Broprint.js combines:
+
 - Audio fingerprint (OfflineAudioContext render)
 - Canvas fingerprint (styled text + `canvas.toDataURL()`)
 - Baseline browser signals (UA, platform, vendor, hardware concurrency, device memory, screen width/height/color depth, devicePixelRatio, languages, timezone)
 - WebGL vendor/renderer (when `WEBGL_debug_renderer_info` is available)
 
 All parts are concatenated and hashed via a compact 53‑bit hash (`cyrb53`). If the audio path fails, the library falls back to canvas + baseline signals (+ WebGL when available). If canvas is unsupported, a stable string plus baseline signals are used to avoid global collisions.
-
 
 ## 🔍 How it works
 
@@ -131,13 +142,11 @@ All parts are concatenated and hashed via a compact 53‑bit hash (`cyrb53`). If
 
 Note: anti‑fingerprinting features (e.g., Brave, Firefox ETP, Safari ITP, extensions) can normalize/obfuscate signals. Broprint.js includes additional entropy to reduce collisions, but uniqueness cannot be guaranteed in all hardened environments.
 
-
 ## 🌐 Browser support
 
 - Modern Chromium, Firefox, and Safari
 - Graceful degradation when audio/canvas/WebGL are unavailable
 - Some privacy modes/extensions may change stability or uniqueness
-
 
 ## 🧰 Troubleshooting
 
@@ -145,10 +154,10 @@ Note: anti‑fingerprinting features (e.g., Brave, Firefox ETP, Safari ITP, exte
 - Identical outputs: your environment may normalize canvas/audio/WebGL; baseline signals still help differentiate.
 - Types: shipped via `lib/index.d.ts`.
 
-
 ## 🛠️ Build & contribute
 
 Library build (root):
+
 ```sh
 npm run build
 ```
@@ -156,7 +165,6 @@ npm run build
 Example app lives under `example/` (Create React App).
 
 PRs and issues welcome.
-
 
 ## 📄 License
 

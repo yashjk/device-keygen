@@ -1,5 +1,5 @@
 {
-	"name": "Device keygen",
+	"name": "device-unique-keygen",
 	"version": "0.0.1",
 	"description": "Generate a unique device id for each device",
 	"main": "./lib/index.js",
@@ -26,7 +26,7 @@
 		"registry": "https://registry.npmjs.org/"
 	},
 	"bin": {
-		"getDeviceId()": "./lib/index.js"
+		"getDeviceId()": "lib/index.js"
 	},
 	"keywords": [
 		"device-keygen",
@@ -61,5 +61,14 @@
 	"devDependencies": {
 		"tsup": "^8.5.0",
 		"typescript": "^5.4.0"
+	},
+	"directories": {
+		"doc": "docs",
+		"example": "example",
+		"lib": "lib"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/yashjk/device-keygen.git"
 	}
 }
