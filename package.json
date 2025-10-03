@@ -1,6 +1,6 @@
 {
 	"name": "device-unique-keygen",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"description": "Generate a unique device id for each device",
 	"main": "./lib/index.js",
 	"module": "./lib/index.mjs",
