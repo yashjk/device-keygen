@@ -1,0 +1,65 @@
+{
+	"name": "Device keygen",
+	"version": "0.0.1",
+	"description": "Generate a unique device id for each device",
+	"main": "./lib/index.js",
+	"module": "./lib/index.mjs",
+	"types": "./lib/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./lib/index.mjs",
+			"require": "./lib/index.js",
+			"default": "./lib/index.mjs",
+			"types": "./lib/index.d.ts"
+		},
+		"./global": "./lib/index.global.js"
+	},
+	"private": false,
+	"scripts": {
+		"build:types": "tsc --emitDeclarationOnly --declaration --outDir lib --declarationMap false",
+		"build:bundle": "tsup src/index.ts --format esm,cjs,iife --global-name Broprint --out-dir lib --minify --clean --silent",
+		"build": "npm run build:bundle && npm run build:types",
+		"build:npm": "npm run build:bundle && npm run build:types",
+		"test": "echo \"Error: no test specified\" && exit 1 "
+	},
+	"publishConfig": {
+		"registry": "https://registry.npmjs.org/"
+	},
+	"bin": {
+		"getDeviceId()": "./lib/index.js"
+	},
+	"keywords": [
+		"device-keygen",
+		"device-key",
+		"device-id",
+		"browserfingerprint",
+		"fingerprinting",
+		"jsfingerprint",
+		"uniquebrowserid",
+		"nodejs",
+		"cryptography",
+		"fraud-detection",
+		"canvas-fingerprinting",
+		"audio-fingerprinting",
+		"visitor-identifier",
+		"identification",
+		"reactjs",
+		"javascript",
+		"typescript"
+	],
+	"author": "Yash-Joshi",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/yashjk/device-keygen.js/issues"
+	},
+	"homepage": "https://github.com/yashjk/device-keygen.js#readme",
+	"files": [
+		"lib",
+		"LICENSE",
+		"README.MD"
+	],
+	"devDependencies": {
+		"tsup": "^8.5.0",
+		"typescript": "^5.4.0"
+	}
+}
