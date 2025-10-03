@@ -1,4 +1,4 @@
-<h1 align="center">Broprint.js</h1>
+<h1 align="center">Device Keygen</h1>
 <p align="center">The world's easiest, smallest and powerful visitor identifier for browsers.</p>
 
 <p align="center">
