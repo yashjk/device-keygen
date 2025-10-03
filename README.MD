@@ -1,23 +1,11 @@
 <h1 align="center">Device Keygen</h1>
 <p align="center">The world's easiest, smallest and powerful visitor identifier for browsers.</p>
 
-<p align="center">
- <a href="https://github.com/Rajesh-Royal/Broprint.js"><img src="https://img.shields.io/badge/total%20size-~2%20KB-brightgreen" height="20"/></a>
- <a href="https://www.npmjs.com/package/@rajesh896/broprint.js">
-    <img src="https://img.shields.io/npm/v/@rajesh896/broprint.js" alt="Current NPM version">
-  </a>
-  <a href="https://broprintjs.netlify.app/" target="_blank"><img src="https://img.shields.io/badge/demo-live-blue" alt="Live Demo"/></a>
-  <a href="https://codesandbox.io/s/browser-fingerprinting-generate-unique-device-id-or-browser-id-507n2v" target="_blank"><img src="https://img.shields.io/badge/CodeSandbox-try%20it-green" alt="CodeSandbox"/></a>
-  <a href="https://twitter.com/intent/tweet?text=The world's easiest, smallest and powerful visitor identifier for browsers.&url=https://github.com/Rajesh-Royal/Broprint.js&hashtags=javascript,opensource,js,webdev,developers"><img src="http://randojs.com/images/tweetShield.svg" alt="Tweet" height="20"/></a>
-</p>
-
 <br/>
 
 <p align="center">
-Broprint.js generates a deterministic string per browser by combining <b>Audio</b>, <b>Canvas</b>, <b>baseline browser signals</b> and optional <b>WebGL vendor/renderer</b>, then hashes the result with a tiny, fast 53‑bit hash.
+Device keygen generates a deterministic string per browser by combining <b>Audio</b>, <b>Canvas</b>, <b>baseline browser signals</b> and optional <b>WebGL vendor/renderer</b>, then hashes the result with a tiny, fast 53‑bit hash.
 </p>
-
-<p align="center"><a href="https://broprintjs.netlify.app/" target="_blank">Live Demo</a></p>
 
 > ⚠ For educational and demonstration purposes only.
 
@@ -42,89 +30,13 @@ npm i device-unique-keygen
 yarn add device-unique-keygen
 ```
 
-### CDN (v2.2.0+)
-
-ESM (modern browsers):
-
-```html
-<script type="module">
-	import { getCurrentBrowserFingerPrint } from "https://cdn.jsdelivr.net/npm/@rajesh896/broprint.js@latest/lib/index.mjs";
-	getCurrentBrowserFingerPrint().then((fp) => console.log("Fingerprint:", fp));
-</script>
-```
-
-Classic global (no module support needed):
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/@rajesh896/broprint.js@latest/lib/index.global.js"></script>
-<script>
-	getCurrentBrowserFingerPrint().then((fp) =>
-		console.log("Fingerprint (global):", fp)
-	);
-</script>
-```
-
-## 🚀 Quick Start
-
-### ESM (Vite, Next.js, CRA with modules)
-
-```js
-import { getCurrentBrowserFingerPrint } from "@rajesh896/broprint.js";
-
-const fp = await getCurrentBrowserFingerPrint();
-console.log(fp);
-```
-
-### CommonJS (Node-style bundlers)
-
-```js
-const { getCurrentBrowserFingerPrint } = require("@rajesh896/broprint.js");
-
-getCurrentBrowserFingerPrint().then(console.log);
-```
-
-### React example
-
-```js
-import { useEffect, useState } from "react";
-import { getCurrentBrowserFingerPrint } from "@rajesh896/broprint.js";
-
-export default function Component() {
-	const [fp, setFp] = useState("");
-	useEffect(() => {
-		getCurrentBrowserFingerPrint()
-			.then((v) => setFp(String(v)))
-			.catch(() => setFp("ERROR"));
-	}, []);
-	return <pre>{fp}</pre>;
-}
-```
-
-### Plain HTML (local install)
-
-```html
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<title>Broprint</title>
-	</head>
-	<body>
-		<script type="module">
-			import { getCurrentBrowserFingerPrint } from "./node_modules/@rajesh896/broprint.js/lib/index.mjs";
-			getCurrentBrowserFingerPrint().then(console.log);
-		</script>
-	</body>
-</html>
-```
-
 ## 📚 API
 
 ### `getCurrentBrowserFingerPrint(): Promise<string>`
 
 Returns a deterministic string for the current browser instance.
 
-Under the hood, Broprint.js combines:
+Under the hood, device keygen combines:
 
 - Audio fingerprint (OfflineAudioContext render)
 - Canvas fingerprint (styled text + `canvas.toDataURL()`)
