@@ -52,7 +52,7 @@ All parts are concatenated and hashed via a compact 53‑bit hash (`cyrb53`). If
 3. Collect baseline signals and optional WebGL vendor/renderer.
 4. Concatenate and hash to produce a compact, deterministic identifier.
 
-Note: anti‑fingerprinting features (e.g., Brave, Firefox ETP, Safari ITP, extensions) can normalize/obfuscate signals. Broprint.js includes additional entropy to reduce collisions, but uniqueness cannot be guaranteed in all hardened environments.
+Note: anti‑fingerprinting features (e.g., Brave, Firefox ETP, Safari ITP, extensions) can normalize/obfuscate signals. Device Keygen includes additional entropy to reduce collisions, but uniqueness cannot be guaranteed in all hardened environments.
 
 ## 🌐 Browser support
 

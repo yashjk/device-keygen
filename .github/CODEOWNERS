@@ -3,14 +3,14 @@
 # Reference <https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners>
 
 # Default owner(s) for everything in the repo
-* @Rajesh-Royal
+* @yashjk
 
 # Documentation
-/docs/ @Rajesh-Royal
+/docs/ @yashjk
 
 # GitHub metadata
-/.github/ @Rajesh-Royal
+/.github/ @yashjk
 
 # Library source (TypeScript) and build outputs
-/src/ @Rajesh-Royal
-/lib/ @Rajesh-Royal
+/src/ @yashjk
+/lib/ @yashjk

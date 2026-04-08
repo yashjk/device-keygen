@@ -8,9 +8,9 @@ importers:
 
   .:
     dependencies:
-      '@rajesh896/broprint.js':
+      'device-unique-keygen':
         specifier: '*'
-        version: 2.2.0
+        version: 0.1.0
       '@testing-library/jest-dom':
         specifier: ^5.16.4
         version: 5.17.0
@@ -1074,8 +1074,8 @@ packages:
       webpack-plugin-serve:
         optional: true
 
-  '@rajesh896/broprint.js@2.2.0':
-    resolution: {integrity: sha512-97TSrJLnSml7U+cUStH6FYcUs/sB1lnG8C7VkZ0ABAEnCZ41LtSFTruPSmOJQtuXhnK2aBU3BFcWiLVmKw9xHA==}
+  'device-unique-keygen@0.1.0':
+    resolution: {directory: '..', type: directory}
     hasBin: true
 
   '@rollup/plugin-babel@5.3.1':
@@ -6886,7 +6886,7 @@ snapshots:
       type-fest: 0.21.3
       webpack-dev-server: 4.15.2(webpack@5.101.3)
 
-  '@rajesh896/broprint.js@2.2.0': {}
+  'device-unique-keygen@0.1.0': {}
 
   '@rollup/plugin-babel@5.3.1(@babel/core@7.28.4)(@types/babel__core@7.20.5)(rollup@2.79.2)':
     dependencies:

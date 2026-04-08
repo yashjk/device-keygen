@@ -31,7 +31,7 @@ All notable changes to this project will be documented in this file.
 
 ## [1.2.0] - 2022-04-22
 ### Added
-- Package renamed as broprint.js
+- Package renamed as device-unique-keygen
 
 ## [1.1.2] - 2022-04-19
 ### Added

@@ -39,7 +39,7 @@ jobs:
       - name: Determine version & check registry
         id: ver
         env:
-          PKG_NAME: "@rajesh896/broprint.js"
+          PKG_NAME: "device-unique-keygen"
         run: |
           VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
