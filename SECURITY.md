@@ -14,7 +14,7 @@ We generally support (accept vulnerability reports against) the latest published
 If you discover a security vulnerability:
 
 1. DO NOT open a public issue.
-2. Email: `security@placeholder.invalid` (replace with a real contact) OR use GitHub private vulnerability reporting if enabled.
+2. Use GitHub private vulnerability reporting if enabled.
 3. Provide a minimal reproduction, impact assessment, and proposed disclosure timeline.
 
 We'll acknowledge receipt within 72 hours and aim to provide an initial remediation plan within 7 days.
@@ -35,7 +35,7 @@ We'll acknowledge receipt within 72 hours and aim to provide an initial remediat
 
 ## Scope
 
-This policy covers code in this repository published as the `@rajesh896/broprint.js` package.
+This policy covers code in this repository published as the `device-unique-keygen` package.
 
 ## Out of Scope
 
