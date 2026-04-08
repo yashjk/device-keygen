@@ -7,7 +7,7 @@ export const isCanvasSupported = () => {
 
 export const getCanvasFingerprint = () => {
     // If canvas is not supported simply return a static string
-    if(!isCanvasSupported()) return "broprint.js"
+    if(!isCanvasSupported()) return "device-keygen"
 
 
     // draw a canvas of given text and return its data uri
@@ -15,7 +15,7 @@ export const getCanvasFingerprint = () => {
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');
     // https://www.browserleaks.com/canvas#how-does-it-work
-    var txt = 'BroPrint.65@345876';
+    var txt = 'DevKeygen.65@345876';
     ctx!.textBaseline = "top";
     ctx!.font = "14px 'Arial'";
     ctx!.textBaseline = "alphabetic";
