@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 // Use the npm package dependency
-import { getCurrentBrowserFingerPrint } from '@rajesh896/broprint.js'
+import { getCurrentBrowserFingerPrint } from 'device-unique-keygen'
 import { Header } from './components/Header'
 import { TitleSection } from './components/TitleSection'
 import { FeatureIcons } from './components/FeatureIcons'
