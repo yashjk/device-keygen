@@ -1,4 +1,4 @@
-# AI Assistant Working Instructions for Broprint.js
+# AI Assistant Working Instructions for Device Keygen
 
 These instructions teach AI coding agents how to contribute effectively to this repository. Keep answers concise and pragmatic.
 
@@ -38,7 +38,7 @@ These instructions teach AI coding agents how to contribute effectively to this 
 
 ## Error Handling
 - Current API rejects only on total failure (both audio + canvas). Preserve this contract; do not throw synchronous errors—return a rejected Promise.
-- If adding new failure modes, ensure they’re caught and degrade gracefully to reduced-entropy fingerprint.
+- If adding new failure modes, ensure they're caught and degrade gracefully to reduced-entropy fingerprint.
 
 ## Performance / Size Considerations
 - Avoid heavy libs (crypto, uuid) — custom hashing already present.
@@ -46,12 +46,12 @@ These instructions teach AI coding agents how to contribute effectively to this 
 
 ## Example Usage (keep working)
 ```ts
-import { getCurrentBrowserFingerPrint } from '@rajesh896/broprint.js';
+import { getCurrentBrowserFingerPrint } from 'device-unique-keygen';
 const id = await getCurrentBrowserFingerPrint();
 ```
 
 ## Common Pitfalls for Agents
-- Don’t introduce Node-only APIs into browser path (fs, path, etc.). This library is browser-focused.
+- Don't introduce Node-only APIs into browser path (fs, path, etc.). This library is browser-focused.
 - Avoid using Date.now randomness in the fingerprint (breaks determinism) unless put behind a clearly documented opt-in.
 - Maintain ESM compatibility; entry point currently works via bare import.
 - Preserve tree-shake friendliness: avoid side-effectful top-level code.
@@ -62,11 +62,11 @@ const id = await getCurrentBrowserFingerPrint();
 - Add lightweight tests for deterministic hashing given mocked inputs.
 
 ## Security / Privacy Notes
-- Fingerprint NOT cryptographically secure or collision-proof; it’s a heuristic identifier. Be explicit if asked.
+- Fingerprint NOT cryptographically secure or collision-proof; it's a heuristic identifier. Be explicit if asked.
 - Respect user privacy—avoid adding invasive signals (plugins, fonts) without discussion.
 
 ## Maintainer Metadata
-- CODEOWNERS: @Rajesh-Royal owns all paths.
+- CODEOWNERS: @yashjk owns all paths.
 - Direct questions to issues or discussions; security concerns follow SECURITY.md process.
 
 Respond with changes only; keep explanations short.
