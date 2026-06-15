@@ -1,11 +1,10 @@
 import { motion } from 'framer-motion'
 import { Fingerprint } from 'lucide-react'
-import { Badge } from './ui/badge'
 import { useEffect, useState } from 'react'
 import { GithubSvgIcon, XSvgIcon } from './icons'
+import { APP_VERSION } from '../version'
 
 export const Header = () => {
-  const [version] = useState('v2')
   const [isLive, setIsLive] = useState(true)
 
   useEffect(() => {
@@ -14,24 +13,50 @@ export const Header = () => {
   }, [])
 
   return (
-    <motion.div className="flex justify-between items-center mb-8" initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-      <div className="flex items-center gap-4">
-        <motion.div animate={{ rotate: 360 }} transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}>
-          <Fingerprint className="w-8 h-8" color="#22d3ee" />
+    <motion.nav
+      className="glass-pill flex items-center justify-between"
+      style={{ marginTop: 18, padding: '10px 16px' }}
+      initial={{ opacity: 0, y: -18 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.7 }}
+    >
+      <div className="flex items-center gap-3">
+        <motion.div
+          className="flex items-center justify-center"
+          style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--metal-gradient)' }}
+          whileHover={{ rotate: 12 }}
+        >
+          <Fingerprint className="w-5 h-5" style={{ color: 'var(--on-accent)' }} />
         </motion.div>
-        <Badge>
-          <motion.div className="w-2 h-2 rounded-full mr-2" style={{ background: isLive ? '#4ade80' : 'rgba(74,222,128,0.4)' }} animate={{ scale: isLive ? 1.2 : 1 }} transition={{ duration: 0.3 }} />
-          {version} LIVE
-        </Badge>
+        <span style={{ fontWeight: 700, letterSpacing: '-0.01em' }}>device-keygen</span>
+        <span className="theme-badge" style={{ marginLeft: 4 }}>
+          <motion.span
+            className="inline-block"
+            style={{ width: 7, height: 7, borderRadius: 9999, marginRight: 7, background: isLive ? 'var(--status-live)' : 'rgba(var(--accent-rgb),0.35)' }}
+            animate={{ scale: isLive ? 1.25 : 1 }}
+            transition={{ duration: 0.3 }}
+          />
+          {`v${APP_VERSION}`}
+        </span>
       </div>
-      <div className="flex gap-4">
-        <motion.a href="https://github.com/yashjk/device-keygen" target="_blank" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} style={{ color: '#22d3ee' }}>
-        <GithubSvgIcon className="w-6 h-6 fill-[#22d3ee]" />
+
+      <div className="flex items-center gap-1">
+        <motion.a href="https://www.npmjs.com/package/device-unique-keygen" target="_blank" rel="noreferrer"
+          className="flex items-center justify-center" style={{ width: 38, height: 38, borderRadius: 10, color: 'var(--text-muted)' }}
+          whileHover={{ scale: 1.12, color: 'var(--accent-bright)' }} whileTap={{ scale: 0.94 }} title="npm">
+          <span style={{ fontWeight: 800, fontSize: 13, letterSpacing: '0.02em' }}>npm</span>
         </motion.a>
-        <motion.a href="https://x.com/joshiyash1206" target="_blank" whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }} style={{ color: '#22d3ee' }}>
-        <XSvgIcon className="w-6 h-6 fill-[#22d3ee]" />
+        <motion.a href="https://github.com/yashjk/device-keygen" target="_blank" rel="noreferrer"
+          className="flex items-center justify-center" style={{ width: 38, height: 38, borderRadius: 10 }}
+          whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.94 }} title="GitHub">
+          <GithubSvgIcon className="w-5 h-5" style={{ fill: 'var(--text-muted)' }} />
+        </motion.a>
+        <motion.a href="https://x.com/joshiyash1206" target="_blank" rel="noreferrer"
+          className="flex items-center justify-center" style={{ width: 38, height: 38, borderRadius: 10 }}
+          whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.94 }} title="X">
+          <XSvgIcon className="w-5 h-5" style={{ fill: 'var(--text-muted)' }} />
         </motion.a>
       </div>
-    </motion.div>
+    </motion.nav>
   )
 }

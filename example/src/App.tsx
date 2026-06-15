@@ -1,33 +1,31 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 // Use the npm package dependency
 import { getCurrentBrowserFingerPrint } from 'device-unique-keygen'
 import { Header } from './components/Header'
-import { TitleSection } from './components/TitleSection'
+import { HeroCard } from './components/HeroCard'
 import { FeatureIcons } from './components/FeatureIcons'
-import { FingerprintPanel } from './components/FingerprintPanel'
-import { GenerateButton } from './components/GenerateButton'
 import { Instructions } from './components/Instructions'
 
 function App() {
   const [fingerprint, setFingerprint] = useState<string | undefined>('')
+  const [error, setError] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [copied, setCopied] = useState(false)
 
-
   const generateFingerprint = async () => {
     setIsGenerating(true)
+    setError(null)
     try {
       const fp = await getCurrentBrowserFingerPrint()
-      // simulate delay
       await new Promise((resolve) => {
         setTimeout(() => {
-          setFingerprint(String(fp));
-          resolve(fp);
-        }, 1500);
+          setFingerprint(String(fp))
+          resolve(fp)
+        }, 1400)
       })
     } catch (e: any) {
-      setFingerprint('ERROR:' + (e?.message || 'failed'))
+      setError(e?.message || 'Failed to generate fingerprint')
+      setFingerprint('')
     } finally {
       setIsGenerating(false)
     }
@@ -43,38 +41,30 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-black relative overflow-hidden App">
-      {/* Animated Background Grid */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 via-blue-500/10 to-emerald-500/10" />
-        <motion.div
-          className="absolute inset-0"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(0,255,255,0.1) 1px, transparent 1px)`,
-            backgroundSize: '50px 50px'
-          }}
-          animate={{ backgroundPosition: ['0px 0px', '50px 50px'] }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-        />
+    <div className="App relative min-h-screen overflow-hidden">
+      {/* Animated aurora background */}
+      <div className="aurora" aria-hidden>
+        <div className="aurora__blob aurora__blob--a" />
+        <div className="aurora__blob aurora__blob--b" />
+        <div className="aurora__blob aurora__blob--c" />
+        <div className="aurora__grid" />
       </div>
-      {/* Floating Particles */}
-      {[...Array(12)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute rounded-full"
-          style={{ width: 4, height: 4, background: '#22d3ee' }}
-          initial={{ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }}
-          animate={{ x: Math.random() * window.innerWidth, y: Math.random() * window.innerHeight }}
-          transition={{ duration: Math.random() * 10 + 10, repeat: Infinity, repeatType: 'reverse' }}
-        />
-      ))}
-      <div className="relative z-10 container mx-auto px-4 py-8" style={{ maxWidth: 1400 }}>
+
+      <div className="relative z-10 mx-auto px-5 sm:px-8" style={{ maxWidth: 920 }}>
         <Header />
-        <TitleSection />
-        <FeatureIcons />
-        <FingerprintPanel fingerprint={fingerprint} isGenerating={isGenerating} copied={copied} onCopy={copyToClipboard} />
-        <GenerateButton isGenerating={isGenerating} onClick={generateFingerprint} />
-        <Instructions />
+
+        <main className="flex flex-col items-center" style={{ rowGap: 'clamp(16px, 2.5vw, 28px)', paddingTop: 'clamp(20px, 3.5vw, 40px)', paddingBottom: 'clamp(28px, 4vw, 52px)' }}>
+          <HeroCard
+            fingerprint={fingerprint}
+            error={error}
+            isGenerating={isGenerating}
+            copied={copied}
+            onGenerate={generateFingerprint}
+            onCopy={copyToClipboard}
+          />
+          <FeatureIcons />
+          <Instructions />
+        </main>
       </div>
     </div>
   )
