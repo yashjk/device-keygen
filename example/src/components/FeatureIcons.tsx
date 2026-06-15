@@ -1,22 +1,41 @@
 import { motion } from 'framer-motion'
-import { Shield, Cpu, Globe, Lock } from 'lucide-react'
+import { Feather, Gauge, Lock, Boxes } from 'lucide-react'
 import React from 'react'
 
 const features = [
-  { icon: Shield, label: 'Secure', color: '#4ade80' },
-  { icon: Cpu, label: 'Fast', color: '#60a5fa' },
-  { icon: Globe, label: 'Universal', color: '#34d399' },
-  { icon: Lock, label: 'Private', color: '#ec4899' }
+  { icon: Feather, label: 'Zero deps', desc: 'Tiny bundle, no runtime dependencies', color: 'var(--feat-1)' },
+  { icon: Gauge, label: 'Deterministic', desc: 'Same device → same key, every time', color: 'var(--feat-2)' },
+  { icon: Lock, label: 'Privacy-first', desc: 'No cookies, no network calls', color: 'var(--feat-3)' },
+  { icon: Boxes, label: 'ESM · CJS · IIFE', desc: 'Ships typed, multi-format builds', color: 'var(--feat-4)' },
 ]
 
 export const FeatureIcons: React.FC = () => (
-  <motion.div className="flex justify-center flex-wrap gap-8 mb-12" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }}>
-    {features.map((f, i) => (
-      <motion.div key={f.label} className="flex flex-col items-center gap-2" whileHover={{ scale: 1.1 }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.8 + i * 0.1 }}>
-        <motion.div style={{ padding: 12, borderRadius: '9999px', border: `1px solid ${f.color}`, background: f.color + '20' }} animate={{ boxShadow: ['0 0 20px ' + f.color + '40', '0 0 30px ' + f.color + '60', '0 0 20px ' + f.color + '40'] }} transition={{ duration: 2, repeat: Infinity }}>
-          <f.icon className="w-6 h-6" color={f.color} />
-        </motion.div>
-        <span style={{ fontSize: 12, color: f.color, fontWeight: 600 }}>{f.label}</span>
+  <motion.div
+    className="grid w-full gap-3"
+    style={{ marginTop: 24, gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))' }}
+    initial="hidden"
+    animate="show"
+    variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08, delayChildren: 0.7 } } }}
+  >
+    {features.map((f) => (
+      <motion.div
+        key={f.label}
+        className="glass"
+        style={{ borderRadius: 22, padding: 22 }}
+        variants={{ hidden: { opacity: 0, y: 18 }, show: { opacity: 1, y: 0 } }}
+        whileHover={{ y: -4 }}
+        transition={{ type: 'spring', stiffness: 200, damping: 18 }}
+      >
+        <div style={{ position: 'relative', zIndex: 2 }}>
+          <div
+            className="flex items-center justify-center mb-4"
+            style={{ width: 40, height: 40, borderRadius: 12, background: `color-mix(in srgb, ${f.color} 16%, transparent)`, border: `1px solid color-mix(in srgb, ${f.color} 35%, transparent)` }}
+          >
+            <f.icon className="w-5 h-5" style={{ color: f.color }} />
+          </div>
+          <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text)' }}>{f.label}</div>
+          <div style={{ fontSize: 13, color: 'var(--text-dim)', marginTop: 6, lineHeight: 1.45 }}>{f.desc}</div>
+        </div>
       </motion.div>
     ))}
   </motion.div>

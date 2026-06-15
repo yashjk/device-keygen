@@ -1,9 +1,8 @@
-// @ts-nocheck 
 // https://github.com/artem0/canvas-fingerprinting/blob/master/hash/murmurhash3.js
 // output - 3705295134 a hashed number of the string.
 // https://en.wikipedia.org/wiki/MurmurHash
-export function murmurhash3_32_gc(key, seed) {
-    var remainder, bytes, h1, h1b, c1, c2, k1, i;
+export function murmurhash3_32_gc(key: string, seed: number): number {
+    let remainder: number, bytes: number, h1: number, h1b: number, c1: number, c2: number, k1: number, i: number;
 
     remainder = key.length & 3; // key.length % 4
     bytes = key.length - remainder;
@@ -63,13 +62,13 @@ export function murmurhash3_32_gc(key, seed) {
 }
 
 // taken from same above repo
-export const javaHashCode = (string, K) => {
-    var hash = 0;
+export const javaHashCode = (string: string, K: number): number => {
+    let hash = 0;
     if (string.length === 0) {
         return hash;
     }
-    let char;
-    for (var i = 0; i < string.length; i++) {
+    let char: number;
+    for (let i = 0; i < string.length; i++) {
         char = string.charCodeAt(i);
         hash = K * ((hash << 5) - hash) + char;
         hash = hash & hash;
@@ -80,9 +79,9 @@ export const javaHashCode = (string, K) => {
 // reference - https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript#answer-52171480
 
 // output - 6533356943844037
-export const cyrb53 = function (str, seed = 0) {
+export const cyrb53 = function (str: string, seed = 0): number {
     let h1 = 0xdeadbeef ^ seed, h2 = 0x41c6ce57 ^ seed;
-    for (let i = 0, ch; i < str.length; i++) {
+    for (let i = 0, ch: number; i < str.length; i++) {
         ch = str.charCodeAt(i);
         h1 = Math.imul(h1 ^ ch, 2654435761);
         h2 = Math.imul(h2 ^ ch, 1597334677);

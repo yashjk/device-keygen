@@ -1,58 +1,39 @@
 # Changelog
-All notable changes to this project will be documented in this file.
+All notable changes to the `device-unique-keygen` package are documented in this file.
 
-## [2.2.0] - 2025-08-11
+## [0.2.0] - 2026-06-15
 
 ### Added
 
-- Multi-format build: ESM (`index.mjs`), CJS (`index.js`), and global/IIFE (`index.global.js`).
-- Export map for proper Node/ bundler resolution.
-- Automatic global `getCurrentBrowserFingerPrint` exposure for classic `<script>` usage.
+- Audio fingerprint now has a timeout guard: if `OfflineAudioContext` stalls, it
+  gracefully falls back to canvas + baseline (+ WebGL) signals instead of hanging.
+
+### Changed
+
+- Core source is now fully typed — removed `@ts-nocheck` from the hash and audio
+  fingerprint modules.
 
 ### Fixed
 
-- CDN usage now works for both `<script type=module>` and classic `<script>` tags.
+- Removed dead Brave-browser branch in `getCurrentBrowserFingerPrint` (both paths
+  were identical).
+- Removed an invalid `bin` entry from `package.json` (the library has no CLI).
 
-### Docs
+### Notes
 
-- README updated with new CDN examples and removed outdated crypto-js reference.
+- Example/demo app fully redesigned with an Apple-style "Liquid Glass" aesthetic.
 
-## [2.1.0] - 2022-05-18
-### Added
-- Logical conditions added for brave browser
-- Readme file and license updated
-- driver function renamed
+## [0.1.1] - 2025-10-03
 
-## [2.0] - 2022-04-22
-### Added
-- Crypto-js dependency removed
-- encryption and hashing algorithms updated.
-- brave browser gives unique id also.
+- Maintenance release.
 
-## [1.2.0] - 2022-04-22
-### Added
-- Package renamed as device-unique-keygen
+## [0.1.0] - 2025-10-03
 
-## [1.1.2] - 2022-04-19
-### Added
-- Deployed to netlify.
-- Better documentation added.
+- Added baseline browser signals (UA, platform, vendor, hardware concurrency,
+  device memory, screen metrics, languages, timezone) and optional WebGL
+  vendor/renderer entropy to improve uniqueness.
+- Graceful fallbacks when audio or canvas signals are unavailable.
 
-## [1.1.1] - 2022-04-06
-### Added
-- Ts types updated.
-- Readme updated for better documentation and with sandbox example
+## [0.0.1] - 2025-10-03
 
-## [1.1.0] - 2022-04-05
-### Added
-- Typescript support
-- crypto-js encryption
-
-## [1.0.1] - 2022-03-03
-### Added
-- demo added
-
-## [1.0.0] - 2022-03-03
-### Initialized
-- Version upgrade.
-- New types added
+- Initial release of the rebranded `device-unique-keygen` package.

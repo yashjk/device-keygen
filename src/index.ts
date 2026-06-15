@@ -63,11 +63,34 @@ export const getCurrentBrowserFingerPrint = (): Promise<string> => {
     /**
      * @return {Promise} - a frequency number 120.256896523
      * @reference - https://fingerprintjs.com/blog/audio-fingerprinting/
+     *
+     * Some browsers restrict or stall OfflineAudioContext rendering (e.g. until
+     * a user gesture). Guard with a timeout so the overall promise can fall back
+     * to canvas + baseline signals instead of hanging forever.
      */
+    const AUDIO_TIMEOUT_MS = 1000;
     const getTheAudioPrints = new Promise((resolve, reject) => {
-        generateTheAudioFingerPrint.run(function (fingerprint: any) {
-            resolve(fingerprint);
-        });
+        let settled = false;
+        const timer = setTimeout(() => {
+            if (!settled) {
+                settled = true;
+                reject(new Error("audio fingerprint timed out"));
+            }
+        }, AUDIO_TIMEOUT_MS);
+        try {
+            generateTheAudioFingerPrint.run(function (fingerprint: any) {
+                if (settled) return;
+                settled = true;
+                clearTimeout(timer);
+                resolve(fingerprint);
+            });
+        } catch (e) {
+            if (!settled) {
+                settled = true;
+                clearTimeout(timer);
+                reject(e);
+            }
+        }
     });
 
     /**
@@ -78,26 +101,15 @@ export const getCurrentBrowserFingerPrint = (): Promise<string> => {
     const DevicePrints: Promise<string> = new Promise((resolve, reject) => {
         const baseline = collectBaselineSignals();
         const webgl = collectWebGLEntropy();
-        getTheAudioPrints.then(async (audioChannelResult) => {
-            let fingerprint = "";
-            // @todo - make fingerprint unique in brave browser
-            if ((navigator.brave && await navigator.brave.isBrave() || false))
-                fingerprint = [
-                    String(window.btoa(String(audioChannelResult))),
-                    String(getCanvasFingerprint()),
-                    baseline,
-                    webgl
-                ].join("::");
-            else
-                fingerprint = [
-                    String(window.btoa(String(audioChannelResult))),
-                    String(getCanvasFingerprint()),
-                    baseline,
-                    webgl
-                ].join("::");
+        getTheAudioPrints.then((audioChannelResult) => {
+            const fingerprint = [
+                String(window.btoa(String(audioChannelResult))),
+                String(getCanvasFingerprint()),
+                baseline,
+                webgl
+            ].join("::");
 
-            // using btoa to hash the values to looks better readable
-            resolve(cyrb53(fingerprint, 0) as unknown as string);
+            resolve(cyrb53(fingerprint, 0).toString());
         }).catch(() => {
             try {
                 // if audio fingerprint fails, rely on canvas + baseline signals (+ webgl) to reduce collisions
@@ -114,14 +126,6 @@ export const getCurrentBrowserFingerPrint = (): Promise<string> => {
     });
     return DevicePrints;
 };
-
-declare global {
-    interface Navigator {
-        brave: {
-            isBrave: () => {}
-        };
-    }
-}
 
 // Expose as a global for classic <script src> usage when a UMD/IIFE build is loaded.
 // This is safe and idempotent; bundlers/tree-shakers ignore this in ESM contexts.
