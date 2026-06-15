@@ -23,10 +23,10 @@ export const Header = () => {
       <div className="flex items-center gap-3">
         <motion.div
           className="flex items-center justify-center"
-          style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--metal-gradient)' }}
+          style={{ width: 34, height: 34, borderRadius: 10, background: 'var(--glass-bg)', border: '1px solid var(--glass-border)' }}
           whileHover={{ rotate: 12 }}
         >
-          <Fingerprint className="w-5 h-5" style={{ color: 'var(--on-accent)' }} />
+          <Fingerprint className="w-5 h-5" style={{ color: 'var(--accent)' }} />
         </motion.div>
         <span style={{ fontWeight: 700, letterSpacing: '-0.01em' }}>device-keygen</span>
         <span className="theme-badge" style={{ marginLeft: 4 }}>
