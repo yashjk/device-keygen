@@ -1,15 +1,23 @@
 //  ref = https://github.com/rickmacgillis/audio-fingerprint/blob/master/audio-fingerprinting.js
-// @ts-nocheck
+
+type FingerprintCallback = (fingerprint: string) => void;
+
+declare global {
+    interface Window {
+        webkitOfflineAudioContext?: typeof OfflineAudioContext;
+    }
+}
+
 export const generateTheAudioFingerPrint = (function () {
 
-    var context = null;
-    var currentTime = null;
-    var oscillator = null;
-    var compressor = null;
-    var fingerprint = null;
-    var callback = null
+    let context: OfflineAudioContext | null = null;
+    let currentTime: number | null = null;
+    let oscillator: OscillatorNode | null = null;
+    let compressor: DynamicsCompressorNode | null = null;
+    let fingerprint: string | null = null;
+    let callback: FingerprintCallback | null = null;
 
-    function run(cb, debug = false) {
+    function run(cb: FingerprintCallback, debug = false): void {
 
         callback = cb;
 
@@ -17,13 +25,13 @@ export const generateTheAudioFingerPrint = (function () {
 
             setup();
 
-            oscillator.connect(compressor);
-            compressor.connect(context.destination);
+            oscillator!.connect(compressor!);
+            compressor!.connect(context!.destination);
 
-            oscillator.start(0);
-            context.startRendering();
+            oscillator!.start(0);
+            context!.startRendering();
 
-            context.oncomplete = onComplete;
+            context!.oncomplete = onComplete;
 
         } catch (e) {
 
@@ -34,26 +42,26 @@ export const generateTheAudioFingerPrint = (function () {
         }
     }
 
-    function setup() {
+    function setup(): void {
         setContext();
-        currentTime = context.currentTime;
+        currentTime = context!.currentTime;
         setOscillator();
         setCompressor();
     }
 
-    function setContext() {
-        var audioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
-        context = new audioContext(1, 44100, 44100);
+    function setContext(): void {
+        const audioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+        context = new audioContext!(1, 44100, 44100);
     }
 
-    function setOscillator() {
-        oscillator = context.createOscillator();
+    function setOscillator(): void {
+        oscillator = context!.createOscillator();
         oscillator.type = "triangle";
-        oscillator.frequency.setValueAtTime(10000, currentTime);
+        oscillator.frequency.setValueAtTime(10000, currentTime!);
     }
 
-    function setCompressor() {
-        compressor = context.createDynamicsCompressor();
+    function setCompressor(): void {
+        compressor = context!.createDynamicsCompressor();
 
         setCompressorValueIfDefined('threshold', -50);
         setCompressorValueIfDefined('knee', 40);
@@ -63,22 +71,23 @@ export const generateTheAudioFingerPrint = (function () {
         setCompressorValueIfDefined('release', .25);
     }
 
-    function setCompressorValueIfDefined(item, value) {
-        if (compressor[item] !== undefined && typeof compressor[item].setValueAtTime === 'function') {
-            compressor[item].setValueAtTime(value, context.currentTime);
+    function setCompressorValueIfDefined(item: string, value: number): void {
+        const param = (compressor as unknown as Record<string, AudioParam | undefined>)[item];
+        if (param !== undefined && typeof param.setValueAtTime === 'function') {
+            param.setValueAtTime(value, context!.currentTime);
         }
     }
 
-    function onComplete(event) {
+    function onComplete(event: OfflineAudioCompletionEvent): void {
         generateFingerprints(event);
-        compressor.disconnect();
+        compressor!.disconnect();
     }
 
-    function generateFingerprints(event) {
-        var output = null;
-        for (var i = 4500; 5e3 > i; i++) {
+    function generateFingerprints(event: OfflineAudioCompletionEvent): void {
+        let output = 0;
+        for (let i = 4500; 5e3 > i; i++) {
 
-            var channelData = event.renderedBuffer.getChannelData(0)[i];
+            const channelData = event.renderedBuffer.getChannelData(0)[i];
             output += Math.abs(channelData);
 
         }
@@ -86,7 +95,7 @@ export const generateTheAudioFingerPrint = (function () {
         fingerprint = output.toString();
 
         if (typeof callback === 'function') {
-            return callback(fingerprint);
+            callback(fingerprint);
         }
     }
 
@@ -95,4 +104,3 @@ export const generateTheAudioFingerPrint = (function () {
     };
 
 })();
-
