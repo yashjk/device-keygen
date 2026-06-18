@@ -1,6 +1,7 @@
 import { useState } from 'react'
 // Use the npm package dependency
 import { getCurrentBrowserFingerPrint } from 'device-unique-keygen'
+import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { Header } from './components/Header'
 import { HeroCard } from './components/HeroCard'
@@ -67,6 +68,7 @@ function App() {
           <Instructions />
         </main>
       </div>
+      <Analytics />
       <SpeedInsights />
     </div>
   )
