@@ -1,106 +1,40 @@
-//  ref = https://github.com/rickmacgillis/audio-fingerprint/blob/master/audio-fingerprinting.js
-
-type FingerprintCallback = (fingerprint: string) => void;
-
 declare global {
     interface Window {
         webkitOfflineAudioContext?: typeof OfflineAudioContext;
     }
 }
 
-export const generateTheAudioFingerPrint = (function () {
-
-    let context: OfflineAudioContext | null = null;
-    let currentTime: number | null = null;
-    let oscillator: OscillatorNode | null = null;
-    let compressor: DynamicsCompressorNode | null = null;
-    let fingerprint: string | null = null;
-    let callback: FingerprintCallback | null = null;
-
-    function run(cb: FingerprintCallback, debug = false): void {
-
-        callback = cb;
-
-        try {
-
-            setup();
-
-            oscillator!.connect(compressor!);
-            compressor!.connect(context!.destination);
-
-            oscillator!.start(0);
-            context!.startRendering();
-
-            context!.oncomplete = onComplete;
-
-        } catch (e) {
-
-            if (debug) {
-                throw e;
-            }
-
-        }
-    }
-
-    function setup(): void {
-        setContext();
-        currentTime = context!.currentTime;
-        setOscillator();
-        setCompressor();
-    }
-
-    function setContext(): void {
-        const audioContext = window.OfflineAudioContext || window.webkitOfflineAudioContext;
-        context = new audioContext!(1, 44100, 44100);
-    }
-
-    function setOscillator(): void {
-        oscillator = context!.createOscillator();
-        oscillator.type = "triangle";
-        oscillator.frequency.setValueAtTime(10000, currentTime!);
-    }
-
-    function setCompressor(): void {
-        compressor = context!.createDynamicsCompressor();
-
-        setCompressorValueIfDefined('threshold', -50);
-        setCompressorValueIfDefined('knee', 40);
-        setCompressorValueIfDefined('ratio', 12);
-        setCompressorValueIfDefined('reduction', -20);
-        setCompressorValueIfDefined('attack', 0);
-        setCompressorValueIfDefined('release', .25);
-    }
-
-    function setCompressorValueIfDefined(item: string, value: number): void {
-        const param = (compressor as unknown as Record<string, AudioParam | undefined>)[item];
-        if (param !== undefined && typeof param.setValueAtTime === 'function') {
-            param.setValueAtTime(value, context!.currentTime);
-        }
-    }
-
-    function onComplete(event: OfflineAudioCompletionEvent): void {
-        generateFingerprints(event);
-        compressor!.disconnect();
-    }
-
-    function generateFingerprints(event: OfflineAudioCompletionEvent): void {
+export async function getAudioFingerprint(timeoutMs = 1000): Promise<string> {
+    const AudioContextConstructor = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    if (!AudioContextConstructor) throw new Error("OfflineAudioContext is unavailable");
+    const context = new AudioContextConstructor(1, 44100, 44100);
+    const oscillator = context.createOscillator();
+    const compressor = context.createDynamicsCompressor();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    oscillator.type = "triangle";
+    oscillator.frequency.setValueAtTime(10000, context.currentTime);
+    compressor.threshold.setValueAtTime(-50, context.currentTime);
+    compressor.knee.setValueAtTime(40, context.currentTime);
+    compressor.ratio.setValueAtTime(12, context.currentTime);
+    compressor.attack.setValueAtTime(0, context.currentTime);
+    compressor.release.setValueAtTime(0.25, context.currentTime);
+    oscillator.connect(compressor);
+    compressor.connect(context.destination);
+    oscillator.start(0);
+    try {
+        const renderedBuffer = await Promise.race([
+            context.startRendering(),
+            new Promise<never>((_, reject) => {
+                timer = setTimeout(() => reject(new Error("Audio fingerprint timed out")), timeoutMs);
+            }),
+        ]);
+        const channel = renderedBuffer.getChannelData(0);
         let output = 0;
-        for (let i = 4500; 5e3 > i; i++) {
-
-            const channelData = event.renderedBuffer.getChannelData(0)[i];
-            output += Math.abs(channelData);
-
-        }
-
-        fingerprint = output.toString();
-
-        if (typeof callback === 'function') {
-            callback(fingerprint);
-        }
+        for (let index = 4500; index < 5000; index += 1) output += Math.abs(channel[index]);
+        return output.toString();
+    } finally {
+        if (timer) clearTimeout(timer);
+        oscillator.disconnect();
+        compressor.disconnect();
     }
-
-    return {
-        run: run
-    };
-
-})();
+}

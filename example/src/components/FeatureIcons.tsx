@@ -1,18 +1,19 @@
 import { motion } from 'framer-motion'
 import { Feather, Gauge, Lock, Boxes } from 'lucide-react'
 import React from 'react'
+import './FeatureIcons.css'
 
 const features = [
   { icon: Feather, label: 'Zero deps', desc: 'Tiny bundle, no runtime dependencies', color: 'var(--feat-1)' },
-  { icon: Gauge, label: 'Deterministic', desc: 'Same device → same key, every time', color: 'var(--feat-2)' },
-  { icon: Lock, label: 'Privacy-first', desc: 'No cookies, no network calls', color: 'var(--feat-3)' },
+  { icon: Gauge, label: 'Deterministic', desc: 'Stable while browser signals remain unchanged', color: 'var(--feat-2)' },
+  { icon: Lock, label: 'Local-first', desc: 'No cookies or package-initiated network calls', color: 'var(--feat-3)' },
   { icon: Boxes, label: 'ESM · CJS · IIFE', desc: 'Ships typed, multi-format builds', color: 'var(--feat-4)' },
 ]
 
 export const FeatureIcons: React.FC = () => (
   <motion.div
-    className="grid w-full gap-3"
-    style={{ marginTop: 24, gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))' }}
+    className="feature-grid grid w-full gap-3"
+    style={{ marginTop: 24 }}
     initial="hidden"
     animate="show"
     variants={{ hidden: {}, show: { transition: { staggerChildren: 0.08, delayChildren: 0.7 } } }}

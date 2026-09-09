@@ -1,6 +1,7 @@
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { Fingerprint, Copy, CheckCircle, Loader2, AlertTriangle, Sparkles, Terminal } from 'lucide-react'
 import React from 'react'
+import './HeroCard.css'
 import { Button } from './ui/button'
 
 interface HeroCardProps {
@@ -35,19 +36,19 @@ export const HeroCard: React.FC<HeroCardProps> = ({
 
   return (
     <motion.div
-      className="w-full"
+      className="hero-shell w-full"
       style={{ perspective: 1200, marginTop: 8 }}
       initial={{ opacity: 0, y: 40, scale: 0.96 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ type: 'spring', stiffness: 90, damping: 16, delay: 0.1 }}
     >
       <motion.div
-        className="glass"
+        className="glass hero-card"
         onMouseMove={handleMove}
         onMouseLeave={reset}
         style={{ rotateX, rotateY, transformStyle: 'preserve-3d', padding: 'clamp(28px, 4.5vw, 56px)' }}
       >
-        <div style={{ position: 'relative', zIndex: 2, transform: 'translateZ(40px)' }}>
+        <div className="hero-content" style={{ position: 'relative', zIndex: 2, transform: 'translateZ(40px)' }}>
           {/* eyebrow */}
           <motion.div
             className="flex justify-center"
@@ -74,8 +75,8 @@ export const HeroCard: React.FC<HeroCardProps> = ({
             style={{ maxWidth: 580, marginTop: 16, color: 'var(--text-muted)', fontSize: 'clamp(15px, 1.6vw, 18px)', lineHeight: 1.6 }}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}
           >
-            A unique, deterministic key for every device — distilled from canvas, audio
-            and WebGL browser signals into one compact hash. No cookies, no tracking SDKs.
+            A compact, deterministic browser key — distilled from canvas, audio,
+            baseline and WebGL signals. No cookies and no tracking SDK.
           </motion.p>
 
           {/* readout */}
@@ -118,7 +119,7 @@ export const HeroCard: React.FC<HeroCardProps> = ({
               ) : (
                 <motion.span key="empty" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                   style={{ color: 'var(--text-placeholder)', fontSize: 15 }}>
-                  Click Generate to produce this device’s unique key
+                  Click Generate to produce a browser identifier
                 </motion.span>
               )}
             </AnimatePresence>
@@ -126,7 +127,7 @@ export const HeroCard: React.FC<HeroCardProps> = ({
 
           {/* actions */}
           <motion.div
-            className="flex flex-wrap items-center justify-center gap-3"
+            className="hero-actions flex flex-wrap items-center justify-center gap-3"
             style={{ marginTop: 22 }}
             initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}
           >

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 // Use the npm package dependency
-import { getCurrentBrowserFingerPrint } from 'device-unique-keygen'
+import { generateDeviceId } from 'device-unique-keygen'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/react'
 import { Header } from './components/Header'
@@ -18,7 +18,7 @@ function App() {
     setIsGenerating(true)
     setError(null)
     try {
-      const fp = await getCurrentBrowserFingerPrint()
+      const fp = await generateDeviceId()
       await new Promise((resolve) => {
         setTimeout(() => {
           setFingerprint(String(fp))

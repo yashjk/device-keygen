@@ -1,83 +1,103 @@
 <h1 align="center">Device Keygen</h1>
-<p align="center">The world's easiest, smallest and powerful visitor identifier for browsers.</p>
+<p align="center">A small, zero-dependency browser identifier built from local browser signals.</p>
 
-<br/>
+Device Keygen combines audio, canvas, baseline browser information, and optional WebGL renderer data into a compact deterministic hash. Collection happens locally in the browser; the package does not transmit or store data.
 
-<p align="center">
-Device keygen generates a deterministic string per browser by combining <b>Audio</b>, <b>Canvas</b>, <b>baseline browser signals</b> and optional <b>WebGL vendor/renderer</b>, then hashes the result with a tiny, fast 53‑bit hash.
-</p>
+## Features
 
-> ⚠ For educational and demonstration purposes only.
+- Zero runtime dependencies
+- ESM, CommonJS, and browser-global builds
+- TypeScript types
+- Configurable signal collection and audio timeout
+- Graceful fallback when optional signals are unavailable
+- Privacy-safe diagnostics that report status without exposing raw signal values
 
-## ✨ Features
-
-- Minimal bundle size, zero runtime deps
-- Multi-format builds: ESM, CJS, Global (IIFE)
-- Works in modern browsers; graceful fallbacks when signals are blocked
-- Includes TypeScript types
-
-## 📦 Installation
-
-### npm
+## Installation
 
 ```sh
 npm i device-unique-keygen
 ```
 
-### Yarn
+## Usage
 
-```sh
-yarn add device-unique-keygen
+```ts
+import { generateDeviceId } from "device-unique-keygen";
+
+const deviceId = await generateDeviceId();
 ```
 
-## 📚 API
+The correctly-cased `getCurrentBrowserFingerprint()` alias is also available. The original `getCurrentBrowserFingerPrint()` export remains available for compatibility and is deprecated.
 
-### `getCurrentBrowserFingerPrint(): Promise<string>`
+## Configuration
 
-Returns a deterministic string for the current browser instance.
+```ts
+const deviceId = await generateDeviceId({
+  algorithm: "v1",
+  audioTimeoutMs: 1500,
+  signals: {
+    audio: true,
+    canvas: true,
+    baseline: true,
+    webgl: false,
+  },
+});
+```
 
-Under the hood, device keygen combines:
+Disabling or changing signals changes the resulting identifier. Store the configuration and algorithm version alongside identifiers when long-term consistency matters.
 
-- Audio fingerprint (OfflineAudioContext render)
-- Canvas fingerprint (styled text + `canvas.toDataURL()`)
-- Baseline browser signals (UA, platform, vendor, hardware concurrency, device memory, screen width/height/color depth, devicePixelRatio, languages, timezone)
-- WebGL vendor/renderer (when `WEBGL_debug_renderer_info` is available)
+## Diagnostics
 
-All parts are concatenated and hashed via a compact 53‑bit hash (`cyrb53`). If the audio path fails, the library falls back to canvas + baseline signals (+ WebGL when available). If canvas is unsupported, a stable string plus baseline signals are used to avoid global collisions.
+```ts
+import { getFingerprintDiagnostics } from "device-unique-keygen";
 
-## 🔍 How it works
+const result = await getFingerprintDiagnostics();
+// {
+//   id: "7857229465367760",
+//   algorithm: "v1",
+//   signals: {
+//     audio: "collected",
+//     canvas: "collected",
+//     baseline: "collected",
+//     webgl: "unavailable"
+//   }
+// }
+```
 
-1. Generate audio entropy using an oscillator + compressor rendered in an `OfflineAudioContext`, summing a slice of the buffer.
-2. Generate canvas entropy by drawing styled text and reading `canvas.toDataURL()`.
-3. Collect baseline signals and optional WebGL vendor/renderer.
-4. Concatenate and hash to produce a compact, deterministic identifier.
+Diagnostics expose only collection status, not raw browser signal values.
 
-Note: anti‑fingerprinting features (e.g., Brave, Firefox ETP, Safari ITP, extensions) can normalize/obfuscate signals. Device Keygen includes additional entropy to reduce collisions, but uniqueness cannot be guaranteed in all hardened environments.
+## Stability contract
 
-## 🌐 Browser support
+The default `v1` algorithm preserves the signal ordering used by the 0.2.x release. Future algorithms will use a new explicit version rather than silently changing existing identifiers.
 
-- Modern Chromium, Firefox, and Safari
-- Graceful degradation when audio/canvas/WebGL are unavailable
-- Some privacy modes/extensions may change stability or uniqueness
+A browser identifier is not a hardware serial number. It may change after browser, operating-system, display, language, privacy-setting, or hardware changes. Hardened browsers may normalize signals, and different devices can collide. Do not use this value as a password, authentication factor, or sole fraud-control decision.
 
-## 🧰 Troubleshooting
+## Responsible use
 
-- Audio context errors: many browsers restrict audio contexts until user interaction; call after a click.
-- Identical outputs: your environment may normalize canvas/audio/WebGL; baseline signals still help differentiate.
-- Types: shipped via `lib/index.d.ts`.
+Browser fingerprinting may be regulated or require disclosure or consent depending on your jurisdiction and use case. Explain the purpose to users, collect only the signals you need, define a retention period, and provide an appropriate opt-out where required. This package performs local computation only; applications decide whether and where to send or store the resulting identifier.
 
-## 🛠️ Build & contribute
+## Browser support
 
-Library build (root):
+Modern Chromium, Firefox, and Safari are tested. Call the API in a browser context, preferably after a user interaction so browsers can permit audio rendering. When audio, canvas, or WebGL is blocked, the package falls back to the remaining enabled signals.
+
+## Browser-global build
+
+```html
+<script src="https://unpkg.com/device-unique-keygen/lib/index.global.js"></script>
+<script>
+  DeviceKeygen.generateDeviceId().then(console.log);
+</script>
+```
+
+## Development
 
 ```sh
+npm ci
+npm test
 npm run build
 ```
 
-Example app lives under `example/` (Create React App).
+The Vite example app lives in `example/`.
 
-PRs and issues welcome.
-
-## 📄 License
+## License
 
 MIT

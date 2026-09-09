@@ -1,16 +1,16 @@
 {
 	"name": "device-unique-keygen",
-	"version": "0.2.0",
-	"description": "Generate a unique device id for each device",
+	"version": "0.3.0",
+	"description": "Generate a compact, deterministic browser identifier from local browser signals",
 	"main": "./lib/index.js",
 	"module": "./lib/index.mjs",
 	"types": "./lib/index.d.ts",
 	"exports": {
 		".": {
+			"types": "./lib/index.d.ts",
 			"import": "./lib/index.mjs",
 			"require": "./lib/index.js",
-			"default": "./lib/index.mjs",
-			"types": "./lib/index.d.ts"
+			"default": "./lib/index.mjs"
 		},
 		"./global": "./lib/index.global.js"
 	},
@@ -20,7 +20,11 @@
 		"build:bundle": "tsup src/index.ts --format esm,cjs,iife --global-name DeviceKeygen --out-dir lib --minify --clean --silent",
 		"build": "npm run build:bundle && npm run build:types",
 		"build:npm": "npm run build:bundle && npm run build:types",
-		"test": "echo \"Error: no test specified\" && exit 1 "
+		"test": "vitest run",
+		"test:package": "node tests/package-exports.mjs",
+		"test:browser": "playwright test",
+		"check": "npm run test && npm run build && npm run test:package && npm pack --dry-run",
+		"prepublishOnly": "npm run test && npm run build"
 	},
 	"publishConfig": {
 		"registry": "https://registry.npmjs.org/"
@@ -46,6 +50,10 @@
 	],
 	"author": "Yash Joshi",
 	"license": "MIT",
+	"sideEffects": false,
+	"engines": {
+		"node": ">=18"
+	},
 	"bugs": {
 		"url": "https://github.com/yashjk/device-keygen/issues"
 	},
@@ -56,8 +64,10 @@
 		"README.MD"
 	],
 	"devDependencies": {
+		"@playwright/test": "^1.63.0",
 		"tsup": "^8.5.0",
-		"typescript": "^5.4.0"
+		"typescript": "^5.4.0",
+		"vitest": "^5.0.0"
 	},
 	"directories": {
 		"doc": "docs",
