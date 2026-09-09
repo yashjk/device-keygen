@@ -280,6 +280,21 @@ body {
 }
 .glow-pulse { animation: glow-pulse 3s ease-in-out infinite; }
 
+.feature-grid {
+  grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr));
+}
+
+@media (max-width: 520px) {
+  .hero-shell { perspective: none !important; }
+  .hero-card { transform: none !important; }
+  .hero-content { transform: none !important; }
+  .hero-actions { align-items: stretch; flex-direction: column; }
+  .hero-actions > * { width: 100%; }
+  .hero-actions button { width: 100%; }
+  .theme-badge { max-width: 100%; text-align: center; }
+  .glass-pill { max-width: 100%; overflow-wrap: anywhere; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .aurora__blob, .shimmer-text, .theme-btn--default::after, .glow-pulse { animation: none !important; }
 }
