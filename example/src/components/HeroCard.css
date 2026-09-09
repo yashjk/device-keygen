@@ -1,0 +1,33 @@
+@media (max-width: 520px) {
+  .hero-shell {
+    perspective: none !important;
+  }
+
+  .hero-card {
+    transform: none !important;
+  }
+
+  .hero-content {
+    transform: none !important;
+  }
+
+  .hero-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .hero-actions > *,
+  .hero-actions button {
+    width: 100%;
+  }
+
+  .hero-card .theme-badge {
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .hero-card .glass-pill {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}

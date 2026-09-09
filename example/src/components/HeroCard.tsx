@@ -1,6 +1,7 @@
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { Fingerprint, Copy, CheckCircle, Loader2, AlertTriangle, Sparkles, Terminal } from 'lucide-react'
 import React from 'react'
+import './HeroCard.css'
 import { Button } from './ui/button'
 
 interface HeroCardProps {

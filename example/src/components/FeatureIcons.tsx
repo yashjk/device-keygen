@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Feather, Gauge, Lock, Boxes } from 'lucide-react'
 import React from 'react'
+import './FeatureIcons.css'
 
 const features = [
   { icon: Feather, label: 'Zero deps', desc: 'Tiny bundle, no runtime dependencies', color: 'var(--feat-1)' },
