@@ -57,7 +57,7 @@ export async function getFingerprintDiagnostics(options: FingerprintOptions = {}
     }
     let canvas = "";
     if (enabled.canvas) {
-        try { canvas = getCanvasFingerprint(); signals.canvas = "collected"; }
+        try { canvas = getCanvasFingerprint(); signals.canvas = canvas ? "collected" : "unavailable"; }
         catch { /* optional signal */ }
     }
     let baseline = "";

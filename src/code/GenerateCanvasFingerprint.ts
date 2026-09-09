@@ -6,8 +6,7 @@ export const isCanvasSupported = () => {
 // this working code snippet is taken from - https://github.com/artem0/canvas-fingerprinting/blob/master/fingerprinting/fingerprint.js
 
 export const getCanvasFingerprint = () => {
-    // If canvas is not supported simply return a static string
-    if(!isCanvasSupported()) return "device-keygen"
+    if (!isCanvasSupported()) return "";
 
 
     // draw a canvas of given text and return its data uri
