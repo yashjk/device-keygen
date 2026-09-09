@@ -5,9 +5,11 @@ test("generates and copies a browser identifier", async ({ page, context, browse
         await context.grantPermissions(["clipboard-read", "clipboard-write"]);
     }
     await page.goto("/");
+    await expect(page.getByRole("button", { name: /^copy$/i })).toBeDisabled();
     await page.getByRole("button", { name: /generate/i }).click();
     const value = page.locator(".glow-pulse");
     await expect(value).toContainText(/^\d+$/, { timeout: 5000 });
+    await expect(page.getByRole("button", { name: /^copy$/i })).toBeEnabled();
     await page.getByRole("button", { name: /copy/i }).click();
     await expect(page.getByRole("button", { name: /copied/i })).toBeVisible();
     if (browserName === "chromium") {
