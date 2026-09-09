@@ -1,6 +1,31 @@
 # Changelog
 All notable changes to the `device-unique-keygen` package are documented in this file.
 
+## [0.3.0] - 2026-09-09
+
+### Added
+
+- Configurable audio, canvas, baseline, and WebGL signal collection.
+- Versioned fingerprint options and privacy-safe signal diagnostics.
+- `generateDeviceId` and correctly-cased `getCurrentBrowserFingerprint` APIs.
+- Unit tests, cross-browser smoke tests, and GitHub Actions verification.
+
+### Changed
+
+- Audio collection now uses isolated per-call state, making concurrent generation safe.
+- Browser-only failures now reject with consistent `Error` objects.
+- Example app migrated from Create React App to Vite.
+- Package documentation now describes stability, collision, and responsible-use limits.
+
+### Deprecated
+
+- `getCurrentBrowserFingerPrint`; use `generateDeviceId` or `getCurrentBrowserFingerprint`.
+
+### Removed
+
+- Unused legacy fingerprint and WebRTC source files.
+- The misleading educational-use-only README disclaimer.
+
 ## [0.2.0] - 2026-06-15
 
 ### Added
