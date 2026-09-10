@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to the `device-unique-keygen` package are documented in this file.
 
+## [0.3.1] - 2026-09-09
+
+### Fixed
+
+- Canvas-only generation now rejects when Canvas 2D is unavailable instead of hashing a shared static fallback.
+- Package metadata now preserves legacy browser-global registration when bundlers tree-shake side-effect-only imports.
+
 ## [0.3.0] - 2026-09-09
 
 ### Added

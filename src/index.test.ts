@@ -1,13 +1,20 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+const mocks = vi.hoisted(() => ({
+    canvasFingerprint: vi.fn().mockReturnValue("canvas-value"),
+}));
+
 vi.mock("./code/generateTheAudioPrints", () => ({
     getAudioFingerprint: vi.fn().mockResolvedValue("1.25"),
 }));
 vi.mock("./code/GenerateCanvasFingerprint", () => ({
-    getCanvasFingerprint: vi.fn().mockReturnValue("canvas-value"),
+    getCanvasFingerprint: mocks.canvasFingerprint,
 }));
 
-afterEach(() => vi.unstubAllGlobals());
+afterEach(() => {
+    vi.unstubAllGlobals();
+    mocks.canvasFingerprint.mockReturnValue("canvas-value");
+});
 
 function installBrowserGlobals(): void {
     vi.stubGlobal("window", { btoa: (value: string) => `b64:${value}`, devicePixelRatio: 2 });
@@ -58,6 +65,27 @@ describe("public API", () => {
         await expect(generateDeviceId({
             signals: { audio: false, canvas: false, baseline: false, webgl: false },
         })).rejects.toThrow("No browser fingerprint signals");
+    });
+
+    it("rejects canvas-only generation when Canvas 2D is unavailable", async () => {
+        installBrowserGlobals();
+        mocks.canvasFingerprint.mockReturnValue("");
+        const { getFingerprintDiagnostics } = await import("./index");
+        await expect(getFingerprintDiagnostics({
+            signals: { audio: false, canvas: true, baseline: false, webgl: false },
+        })).rejects.toThrow("No browser fingerprint signals");
+    });
+
+    it("reports unavailable canvas while retaining successful fallback signals", async () => {
+        installBrowserGlobals();
+        mocks.canvasFingerprint.mockReturnValue("");
+        const { getFingerprintDiagnostics } = await import("./index");
+        const result = await getFingerprintDiagnostics({
+            signals: { audio: false, canvas: true, baseline: true, webgl: false },
+        });
+        expect(result.signals.canvas).toBe("unavailable");
+        expect(result.signals.baseline).toBe("collected");
+        expect(result.id).toMatch(/^\d+$/);
     });
 
     it("rejects unsupported algorithm versions at runtime", async () => {
