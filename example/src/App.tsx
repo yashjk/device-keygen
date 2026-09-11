@@ -7,8 +7,19 @@ import { Header } from './components/Header'
 import { HeroCard } from './components/HeroCard'
 import { FeatureIcons } from './components/FeatureIcons'
 import { Instructions } from './components/Instructions'
+import { SupportPage } from './components/SupportPage'
 
 function App() {
+  if (window.location.pathname === '/support') {
+    return (
+      <>
+        <SupportPage />
+        <Analytics />
+        <SpeedInsights />
+      </>
+    )
+  }
+
   const [fingerprint, setFingerprint] = useState<string | undefined>('')
   const [error, setError] = useState<string | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)

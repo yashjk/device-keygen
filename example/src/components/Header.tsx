@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion'
-import { Fingerprint } from 'lucide-react'
+import { Fingerprint, Heart } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { GithubSvgIcon, XSvgIcon } from './icons'
 import { APP_VERSION } from '../version'
+import './Header.css'
 
 export const Header = () => {
   const [isLive, setIsLive] = useState(true)
@@ -41,8 +42,13 @@ export const Header = () => {
       </div>
 
       <div className="flex items-center gap-1">
-        <motion.a href="https://www.npmjs.com/package/device-unique-keygen" target="_blank" rel="noreferrer"
+        <motion.a href="/support"
           className="flex items-center justify-center" style={{ width: 38, height: 38, borderRadius: 10, color: 'var(--text-muted)' }}
+          whileHover={{ scale: 1.12, color: 'var(--accent-bright)' }} whileTap={{ scale: 0.94 }} title="Support the project" aria-label="Support the project">
+          <Heart className="w-5 h-5" />
+        </motion.a>
+        <motion.a href="https://www.npmjs.com/package/device-unique-keygen" target="_blank" rel="noreferrer"
+          className="header-secondary-link flex items-center justify-center" style={{ width: 38, height: 38, borderRadius: 10, color: 'var(--text-muted)' }}
           whileHover={{ scale: 1.12, color: 'var(--accent-bright)' }} whileTap={{ scale: 0.94 }} title="npm">
           <span style={{ fontWeight: 800, fontSize: 13, letterSpacing: '0.02em' }}>npm</span>
         </motion.a>
@@ -52,7 +58,7 @@ export const Header = () => {
           <GithubSvgIcon className="w-5 h-5" style={{ fill: 'var(--text-muted)' }} />
         </motion.a>
         <motion.a href="https://x.com/joshiyash1206" target="_blank" rel="noreferrer"
-          className="flex items-center justify-center" style={{ width: 38, height: 38, borderRadius: 10 }}
+          className="header-secondary-link flex items-center justify-center" style={{ width: 38, height: 38, borderRadius: 10 }}
           whileHover={{ scale: 1.12 }} whileTap={{ scale: 0.94 }} title="X">
           <XSvgIcon className="w-5 h-5" style={{ fill: 'var(--text-muted)' }} />
         </motion.a>

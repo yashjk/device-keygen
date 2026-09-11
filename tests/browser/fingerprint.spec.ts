@@ -17,3 +17,56 @@ test("generates and copies a browser identifier", async ({ page, context, browse
             .toBe((await value.textContent())?.trim());
     }
 });
+
+test("offers a valid UPI support flow", async ({ page, context, browserName }) => {
+    if (browserName === "chromium") {
+        await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+    }
+    await page.goto("/support");
+    await expect(page.getByRole("heading", { name: /help maintain device keygen/i })).toBeVisible();
+    await expect(page.getByLabel("UPI payment QR code")).toBeVisible();
+    await expect(page.getByText("yash-joshi-1@yescred", { exact: true })).toBeVisible();
+    await expect(page.getByRole("link", { name: /pay with upi/i }))
+        .toHaveAttribute("href", /^upi:\/\/pay\?pa=yash-joshi-1%40yescred/);
+    await page.getByRole("button", { name: /copy upi id/i }).click();
+    await expect(page.getByRole("button", { name: /copied/i })).toBeVisible();
+    if (browserName === "chromium") {
+        await expect.poll(() => page.evaluate(() => navigator.clipboard.readText()))
+            .toBe("yash-joshi-1@yescred");
+    }
+});
+
+test("reports denied UPI clipboard access", async ({ page }) => {
+    await page.addInitScript(() => {
+        Object.defineProperty(navigator, "clipboard", {
+            configurable: true,
+            value: { writeText: () => Promise.reject(new Error("denied")) },
+        });
+    });
+    await page.goto("/support");
+    await page.getByRole("button", { name: /copy upi id/i }).click();
+    await expect(page.getByRole("alert")).toHaveText(/copy failed/i);
+});
+
+test("serializes overlapping UPI copy attempts", async ({ page }) => {
+    await page.addInitScript(() => {
+        Object.defineProperty(window, "clipboardWriteCount", { configurable: true, writable: true, value: 0 });
+        Object.defineProperty(navigator, "clipboard", {
+            configurable: true,
+            value: {
+                writeText: () => {
+                    (window as Window & { clipboardWriteCount: number }).clipboardWriteCount += 1;
+                    return new Promise((resolve) => window.setTimeout(resolve, 250));
+                },
+            },
+        });
+    });
+    await page.goto("/support");
+    const copyButton = page.locator("button.support-button");
+    await copyButton.click();
+    await expect(page.getByRole("button", { name: /copying/i })).toBeDisabled();
+    await copyButton.evaluate((button: HTMLButtonElement) => button.click());
+    await expect.poll(() => page.evaluate(() => (window as Window & { clipboardWriteCount: number }).clipboardWriteCount))
+        .toBe(1);
+    await expect(page.getByRole("button", { name: /copied/i })).toBeEnabled();
+});
