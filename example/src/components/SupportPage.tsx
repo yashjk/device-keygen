@@ -9,11 +9,18 @@ const UPI_URL = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURICompon
 
 export const SupportPage = () => {
   const [copied, setCopied] = useState(false)
+  const [copyError, setCopyError] = useState(false)
 
   const copyUpiId = async () => {
-    await navigator.clipboard.writeText(UPI_ID)
-    setCopied(true)
-    window.setTimeout(() => setCopied(false), 2000)
+    setCopyError(false)
+    try {
+      await navigator.clipboard.writeText(UPI_ID)
+      setCopied(true)
+      window.setTimeout(() => setCopied(false), 2000)
+    } catch {
+      setCopied(false)
+      setCopyError(true)
+    }
   }
 
   return (
@@ -65,6 +72,9 @@ export const SupportPage = () => {
                   Pay with UPI
                 </a>
               </div>
+              <p className="support-copy-status" role={copyError ? 'alert' : 'status'} aria-live="polite">
+                {copyError ? 'Copy failed. Select the UPI ID above and copy it manually.' : copied ? 'UPI ID copied to clipboard.' : ''}
+              </p>
               <p className="support-mobile-hint">Scan the QR code or open this page on a UPI-enabled device.</p>
             </div>
           </section>

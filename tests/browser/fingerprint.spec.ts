@@ -35,3 +35,15 @@ test("offers a valid UPI support flow", async ({ page, context, browserName }) =
             .toBe("yash-joshi-1@yescred");
     }
 });
+
+test("reports denied UPI clipboard access", async ({ page }) => {
+    await page.addInitScript(() => {
+        Object.defineProperty(navigator, "clipboard", {
+            configurable: true,
+            value: { writeText: () => Promise.reject(new Error("denied")) },
+        });
+    });
+    await page.goto("/support");
+    await page.getByRole("button", { name: /copy upi id/i }).click();
+    await expect(page.getByRole("alert")).toHaveText(/copy failed/i);
+});

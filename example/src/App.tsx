@@ -10,7 +10,15 @@ import { Instructions } from './components/Instructions'
 import { SupportPage } from './components/SupportPage'
 
 function App() {
-  if (window.location.pathname === '/support') return <SupportPage />
+  if (window.location.pathname === '/support') {
+    return (
+      <>
+        <SupportPage />
+        <Analytics />
+        <SpeedInsights />
+      </>
+    )
+  }
 
   const [fingerprint, setFingerprint] = useState<string | undefined>('')
   const [error, setError] = useState<string | null>(null)
