@@ -47,3 +47,26 @@ test("reports denied UPI clipboard access", async ({ page }) => {
     await page.getByRole("button", { name: /copy upi id/i }).click();
     await expect(page.getByRole("alert")).toHaveText(/copy failed/i);
 });
+
+test("serializes overlapping UPI copy attempts", async ({ page }) => {
+    await page.addInitScript(() => {
+        Object.defineProperty(window, "clipboardWriteCount", { configurable: true, writable: true, value: 0 });
+        Object.defineProperty(navigator, "clipboard", {
+            configurable: true,
+            value: {
+                writeText: () => {
+                    (window as Window & { clipboardWriteCount: number }).clipboardWriteCount += 1;
+                    return new Promise((resolve) => window.setTimeout(resolve, 250));
+                },
+            },
+        });
+    });
+    await page.goto("/support");
+    const copyButton = page.locator("button.support-button");
+    await copyButton.click();
+    await expect(page.getByRole("button", { name: /copying/i })).toBeDisabled();
+    await copyButton.evaluate((button: HTMLButtonElement) => button.click());
+    await expect.poll(() => page.evaluate(() => (window as Window & { clipboardWriteCount: number }).clipboardWriteCount))
+        .toBe(1);
+    await expect(page.getByRole("button", { name: /copied/i })).toBeEnabled();
+});

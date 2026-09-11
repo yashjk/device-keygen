@@ -10,8 +10,11 @@ const UPI_URL = `upi://pay?pa=${encodeURIComponent(UPI_ID)}&pn=${encodeURICompon
 export const SupportPage = () => {
   const [copied, setCopied] = useState(false)
   const [copyError, setCopyError] = useState(false)
+  const [isCopying, setIsCopying] = useState(false)
 
   const copyUpiId = async () => {
+    if (isCopying) return
+    setIsCopying(true)
     setCopyError(false)
     try {
       await navigator.clipboard.writeText(UPI_ID)
@@ -20,6 +23,8 @@ export const SupportPage = () => {
     } catch {
       setCopied(false)
       setCopyError(true)
+    } finally {
+      setIsCopying(false)
     }
   }
 
@@ -63,9 +68,9 @@ export const SupportPage = () => {
                 <strong>{UPI_ID}</strong>
               </div>
               <div className="support-actions">
-                <button className="theme-btn theme-btn--outline support-button" onClick={copyUpiId} type="button">
+                <button className="theme-btn theme-btn--outline support-button" onClick={copyUpiId} type="button" disabled={isCopying}>
                   {copied ? <Check aria-hidden size={18} /> : <Copy aria-hidden size={18} />}
-                  {copied ? 'Copied' : 'Copy UPI ID'}
+                  {isCopying ? 'Copying...' : copied ? 'Copied' : 'Copy UPI ID'}
                 </button>
                 <a className="theme-btn theme-btn--default support-button" href={UPI_URL}>
                   <Smartphone aria-hidden size={18} />
