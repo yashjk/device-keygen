@@ -10,6 +10,7 @@
     "device-unique-keygen": "file:..",
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.441.0",
+    "qrcode.react": "^4.2.0",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "tailwind-merge": "^2.6.0",
